@@ -88,7 +88,9 @@
     </div>
 
     <div id="info-panel">
+        <p><a href="main.html">
         <img id="logo" src="images/OFM_logo.png" alt="OpenFlexure Microscope Logo" width="100" height="auto">
+        </a></p>
         <p>Zoom: <span id="zoom-level">1.00x</span></p>
         <p>File: <span id="filename-display"></span></p>
     </div>
@@ -108,11 +110,7 @@
             viewer = OpenSeadragon({
                 id: "viewer",
                 prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
-                tileSources: {
-                    type: 'image',
-                    url: imageSrc || 'images/colon adenoca.jpg',
-                    buildPyramid: false
-                },
+                tileSources: "images/colon adenoca.dzi",
                 showNavigationControl: false,
                 maxZoomPixelRatio: 10,
                 gestureSettingsMouse: {

@@ -108,11 +108,7 @@
             viewer = OpenSeadragon({
                 id: "viewer",
                 prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
-                tileSources: {
-                    type: 'image',
-                    url: imageSrc || 'images/liver EMH.jpg',
-                    buildPyramid: false
-                },
+                tileSources: 'images/liver EMH.dzi',
                 showNavigationControl: false,
                 maxZoomPixelRatio: 10,
                 gestureSettingsMouse: {
