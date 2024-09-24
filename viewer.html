@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenFlexure Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: black;
+        }
+        #viewer {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        #toolbar {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 3px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .tool-button {
+            background-color: #C5247F;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #info-panel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 1px;
+            z-index: 1000;
+        }
+        #data-panel {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 1px;
+            z-index: 1000;
+        }
+        /* Dropdown Button */
+        .dropbtn {
+        background-color: #C5247F;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        width: 150px;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+        position: relative;
+        display: inline-block;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #ddd;}
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {display: block;}
+
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {background-color: #9c2b6b;}
+    </style>
+</head>
+<body>
+
+    <div id="viewer"></div>
+    <div id="toolbar">
+        <button id="zoom-in" class="tool-button">Zoom In</button>
+        <button id="zoom-out" class="tool-button">Zoom Out</button>
+        <button id="home" class="tool-button">Full View</button>
+    </div>
+
+    <div id="info-panel">
+        <a href="https://openflexure.org/projects/microscope/" target=”_blank”>
+            <img id="logo" src="images/OFM_logo.png" alt="OpenFlexure Microscope Logo" width="150" height="auto">
+        </a>
+        <p align="center">Zoom: <span id="zoom-level">1.00×</span></p>
+        <div class="dropdown">
+            <button class="dropbtn">Select sample</button>
+                <div class="dropdown-content">
+                    <a onclick="onChange('classic HL')">Lymph Node Biopsy</a>
+                    <a onclick="onChange('AIN3')">Anal Biopsy</a>
+                    <a onclick="onChange('liver EMH')">Liver Biopsy</a>
+                    <a onclick="onChange('prostate 3+3')">Prostate Biopsy</a>
+                    <a onclick="onChange('fundic_gland_polyp')">Stomach Biopsy</a>
+                    <a onclick="onChange('PAP')">Cervical smear</a>
+                    <a onclick="onChange('colon adenoca')">Colon Biopsy</a>
+                    <a onclick="onChange('blood')">Blood Smear</a>
+                </div>
+        </div>
+    </div>
+    <div id="data-panel">
+        <p>Age: <span id="Age">1</span></p>
+        <p>Sex: <span id="Sex">F</span></p>
+        <p>Notes: <span id="Notes"></span></p>
+
+
+    <script>
+        let viewer;
+
+        function initializeViewer(imageName) {
+            if (viewer) {
+                viewer.destroy();
+            }
+
+            viewer = OpenSeadragon({
+                id: "viewer",
+                prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/",
+                tileSources: imageName,
+                showNavigationControl: false,
+                maxZoomPixelRatio: 10,
+                gestureSettingsMouse: {
+                    clickToZoom: false
+                }
+            });
+
+            viewer.addHandler('zoom', function() {
+                updateZoomLevel();
+            });
+        }
+
+        function updateZoomLevel() {
+            const zoomLevel = viewer.viewport.getZoom();
+            document.getElementById('zoom-level').textContent = zoomLevel.toFixed(2) + '×';
+        }
+        
+        function updatePosition() {
+            const center = viewer.viewport.getCenter();
+            document.getElementById('position').textContent = 
+                `${center.x.toFixed(2)}, ${center.y.toFixed(2)}`;
+        }
+
+        function onChange(value) {
+            fetch('data.json')
+            .then(function (response) {
+            return response.json();
+            })
+            .then(function (data) {
+                appendData(data);
+            })
+            .catch(function (err) {
+                console.log('error: ' + err);
+            });
+
+            function appendData(data) {
+                document.getElementById("Age").textContent = data[value].age;
+                document.getElementById("Sex").textContent = data[value].sex;
+                document.getElementById("Notes").textContent = data[value].notes;
+            }
+            initializeViewer('images/'+value+'.dzi');
+            updateData(value);
+        }
+
+        function updateData(value) {
+            document.getElementById('Age').textContent = src;
+        }
+
+        document.getElementById('zoom-in').addEventListener('click', function() {
+            viewer.viewport.zoomBy(1.5);
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', function() {
+            viewer.viewport.zoomBy(0.67);
+        });
+
+        document.getElementById('home').addEventListener('click', function() {
+            viewer.viewport.goHome();
+        });
+
+        window.onload = function() {
+            let value = "PAP";
+            onChange(value);
+        };
+
+        initializeViewer();
+    </script>
+</body>
+</html>

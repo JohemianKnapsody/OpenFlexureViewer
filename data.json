@@ -1,0 +1,42 @@
+{
+    "PAP" : {
+      "age": "34",
+      "sex": "F",
+      "notes": ""
+    },
+    "classic HL" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      },
+    "liver EMH" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      },
+    "prostate 3+3" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      },
+    "fundic_gland_polyp" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      },
+    "colon adenoc" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      },
+    "blood" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      },
+    "AIN3" : {
+        "age": "64",
+        "sex": "M",
+        "notes": ""
+      }
+}
