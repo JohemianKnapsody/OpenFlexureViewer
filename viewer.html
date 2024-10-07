@@ -52,6 +52,15 @@
             border-radius: 1px;
             z-index: 1000;
         }
+
+        .button {
+        padding: 12px;
+        margin: 4px;
+        color: white;
+        background-color: #C5247F;
+        cursor: pointer;
+        }
+
         @media only screen and (min-width: 800px) {
         #data-panel {
             position: absolute;
@@ -123,7 +132,7 @@
         opacity: 1;
         }
 
-        .dropbtn:hover, .dropdown:focus .dropbtn {
+        .dropbtn:hover, .dropdown:focus .dropbtn, .button:hover {
         background-color: #a11a67;
         }
 
@@ -163,6 +172,8 @@
         </div>
         <div class="center_text">
             <p>Zoom: <span id="zoom-level">1.00×</span></p>
+            <div><button class="button" onclick="openFullscreen();">Open Fullscreen</button></div>
+            <div><button class="button" onclick="closeFullscreen();">Close Fullscreen</button></div>
         </div>
     </div>
 
@@ -232,17 +243,26 @@
             document.getElementById('Age').textContent = src;
         }
 
-        // document.getElementById('zoom-in').addEventListener('click', function() {
-        //     viewer.viewport.zoomBy(1.5);
-        // });
+        var elem = document.documentElement;
+        function openFullscreen() {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+        }
 
-        // document.getElementById('zoom-out').addEventListener('click', function() {
-        //     viewer.viewport.zoomBy(0.67);
-        // });
-
-        // document.getElementById('home').addEventListener('click', function() {
-        //     viewer.viewport.goHome();
-        // });
+        function closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+        }
 
         window.onload = function() {
             let value = "PAP";
