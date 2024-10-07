@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenFlexure Viewer</title>
+    <link rel="icon" href="favicon.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
 
     <style>
@@ -76,6 +77,12 @@
         margin: 12px 0px;
         }
 
+        .dropdown-scrollbar{
+        max-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        }
+
         /* button */
         .dropbtn {
         padding: 12px;
@@ -135,7 +142,7 @@
         <div class="dropdown" tabindex="1">
             <i class="db2" tabindex="1"></i>
                 <a class="dropbtn">Select sample</a>
-                    <div class="dropdown-content">
+                    <div class="dropdown-content dropdown-scrollbar">
                         <a href="#" onclick="onChange('classic HL')">Lymph Node Biopsy</a>
                         <a href="#" onclick="onChange('AIN3')">Anal Biopsy</a>
                         <a href="#" onclick="onChange('liver EMH')">Liver Biopsy</a>
